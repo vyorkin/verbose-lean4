@@ -1,6 +1,5 @@
 import Mathlib.Topology.MetricSpace.Basic
-import Verbose.Russian.Tactics
-import Verbose.Russian.Statements
+import Verbose.Russian.All
 
 def continuous_function_at (f : ℝ → ℝ) (x₀ : ℝ) :=
 ∀ ε > 0, ∃ δ > 0, ∀ x, |x - x₀| ≤ δ → |f x - f x₀| ≤ ε
@@ -44,7 +43,6 @@ configureAnonymousFactSplittingLemmas le_le_of_abs_le le_le_of_max_le le_of_max_
 
 configureAnonymousGoalSplittingLemmas LogicIntros AbsIntros Set.Subset.antisymm
 
--- TODO: once Verbose.Russian.Widget (see Verbose/Tactics/Widget.lean) is ported, switch
--- the import above to Verbose.Russian.All and re-enable these two, as English/French do.
--- useDefaultDataProviders
--- useDefaultSuggestionProviders
+useDefaultDataProviders
+
+useDefaultSuggestionProviders

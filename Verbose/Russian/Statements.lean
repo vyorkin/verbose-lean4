@@ -1,24 +1,18 @@
 import Verbose.Tactics.Statements
+import Verbose.Russian.Widget
 
 open Lean Meta Elab Command Parser Tactic
 
 open Lean.Parser.Term (bracketedBinder)
 
--- Widget/Help have not been ported yet (see Verbose/Russian/TokenSupport.lean and the
--- project plan): rather than depending on Verbose.Russian.Widget, always fall back to
--- `without_suggestions`, exactly what Verbose/Tactics/Statements.lean does itself when
--- `config.useSuggestionWidget` is false. Once Widget is ported, replace this with a real
--- `with_suggestions%$tkp $prf` implementation, as English/French do.
 implement_endpoint (lang := ru) mkWidgetProof (prf : TSyntax ``tacticSeq) (tkp : Syntax) : CoreM (TSyntax `tactic) :=
-  Lean.TSyntax.mkInfoCanonical <$> `(tactic| without_suggestions%$tkp $prf)
+  -- the token itself should have the info of `Доказательство:` so that incrementality is not
+  -- disabled but the overall syntax node should have the full ref (the proof block) as
+  -- canonical info so that the widget is shown on the entire block
+  Lean.TSyntax.mkInfoCanonical <$> `(tactic| with_suggestions%$tkp $prf)
 
 implement_endpoint (lang := ru) victoryMessage : CoreM String := return "Победа 🎉"
 implement_endpoint (lang := ru) noVictoryMessage : CoreM String := return "Упражнение не завершено."
-
--- Without a fuller import chain pulling in a "setLang ru" (which English/French get for
--- free by importing their Widget module), this file's own exported configuration would
--- otherwise default back to "en" — see Verbose/Russian/ExampleLib.lean and the project plan.
-setLang ru
 
 /- **TODO**  Allow omitting Дано or Предположения. -/
 

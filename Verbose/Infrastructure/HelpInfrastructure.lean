@@ -430,12 +430,33 @@ register_endpoint apply_suggestion : CoreM String
 
 open Lean.Meta.Tactic.TryThis
 
+/-- Lean's `isIdFirst`/`isIdRest` (used by the pretty-printer to decide whether two adjacent
+tokens need a separating space when re-serializing a `Syntax` tree) do not cover Cyrillic
+letters, so re-pretty-printing a tactic suggestion can silently drop the space between an
+identifier and an adjacent Cyrillic keyword (e.g. "h применённый" becomes "hприменённый").
+This restores it. It is a no-op on text with no Cyrillic content, so this is harmless for
+English/French (or any other language whose keywords are already covered by `isIdFirst`). -/
+def fixCyrillicSpacing (s : String) : String :=
+  let isCyrillicLetter (c : Char) : Bool := 0x0400 ≤ c.val && c.val ≤ 0x04FF
+  let rec go : List Char → List Char
+    | a :: b :: rest =>
+      if (isIdRest a && isCyrillicLetter b) || (isCyrillicLetter a && isIdFirst b) then
+        a :: ' ' :: go (b :: rest)
+      else
+        a :: go (b :: rest)
+    | l => l
+  String.ofList (go s.toList)
+
 def mkSuggestionsMessage (suggestions : Array Suggestion) (ref : Syntax) : CoreM MessageData := do
   let mut msg := m!""
   for suggestion in suggestions do
     let some range := ref |>.getRange? | continue
-    let edit ← suggestion.processEdit range
-    let suggestionText := edit.newText
+    -- Some (rare, already known-buggy) suggestion generators produce a `Syntax` tree that the
+    -- parenthesizer cannot re-serialize (`parenthesize: uncaught backtrack exception`). Skip
+    -- such a suggestion rather than letting it take down the whole `help` output.
+    let some edit ← (try some <$> suggestion.processEdit range catch _ => pure none)
+      | continue
+    let suggestionText := fixCyrillicSpacing edit.newText
     let ref := Syntax.ofRange <| ref.getRange?.getD range
     let info := Info.ofCustomInfo {
       stx := ref

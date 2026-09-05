@@ -364,14 +364,14 @@ def makeSuggestionsOnlyFullGoals (selectionInfo : SelectionInfo) (goal : MVarId)
   let (s, _msg) ← gatherSuggestions (helpAtGoal goal)
   for sug in s do
     let text ← sug.suggestion.pretty
-    pushSuggestion (toString text)
+    pushSuggestion (fixCyrillicSpacing (toString text))
 
 def makeSuggestionsSingleProp (selectionInfo : SelectionInfo) (goal : MVarId) : WidgetM Unit := do
   let some ld := selectionInfo.singleProp | return
   let (s, _msg) ← gatherSuggestions (helpAtHyp goal ld.userName)
   for sug in s do
     let text ← sug.suggestion.pretty
-    pushSuggestion (toString text)
+    pushSuggestion (fixCyrillicSpacing (toString text))
 
 def makeSuggestionsFullGoal (selectionInfo : SelectionInfo) (goal : MVarId) : WidgetM Unit := do
   if selectionInfo.fullGoal then do
