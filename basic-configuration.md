@@ -22,12 +22,11 @@ This fork additionally includes an unofficial Russian port, activated with
 ```lean
 setLang ru
 ```
-It covers the same core tactics as English/French (see
-[`Verbose/Russian/Examples.lean`](Verbose/Russian/Examples.lean)), but the
-`help` tactic and the suggestion widget have not been ported yet, so
-`enableHelpTactic`/`enableWidget` have no Russian-language effect. See
-[`translations.md`](translations.md) for a note on why Cyrillic tactic
-keywords need a small workaround that English/French don't.
+It covers the same tactics as English/French, including the `помощь`
+(`help`) tactic and the suggestion widget — see
+[`Verbose/Russian/Examples.lean`](Verbose/Russian/Examples.lean). See
+[`translations.md`](translations.md) for a note on the Lean-level quirks
+Cyrillic keywords ran into that English/French don't hit.
 
 Then there are a number of boolean configuration options that can be set using
 the following commands:

@@ -127,3 +127,24 @@ None of this is needed for keywords living in a custom `declare_syntax_cat`
 category (as opposed to the built-in `tactic` category) — those register
 fine for any script, which is why e.g. the "such that"/"applied to"-style
 categories in `Verbose/Russian/Common.lean` need no such workaround.
+
+Porting `Help.lean` (the `help` tactic and the suggestion widget, whose job
+is to *re-pretty-print* already-elaborated `Syntax` trees as suggested code)
+surfaced two further `isIdFirst`-shaped quirks, both worked around centrally
+in `Verbose/Infrastructure/HelpInfrastructure.lean` and
+`Verbose/Tactics/Widget.lean` (language-independent, harmless no-ops for
+English/French):
+
+- Re-serializing a tactic `Syntax` tree can silently drop the space between
+  an identifier and an adjacent Cyrillic keyword atom ("h применённый"
+  becomes "hприменённый"), because the pretty-printer's "would concatenating
+  these tokens be ambiguous" check is also `isIdFirst`-based and Cyrillic
+  fails it either way. `Verbose.fixCyrillicSpacing` restores the space by
+  scanning the rendered string for identifier/Cyrillic boundaries.
+- A handful of hypothesis-shape suggestion generators that were *already*
+  marked "completely broken" in English/French (the double-quantifier
+  `∀ x, ∀ y rel x, …` pattern) go one step further for Cyrillic: the
+  parenthesizer throws `uncaught backtrack exception` instead of just
+  rendering the wrong text. `mkSuggestionsMessage` now skips a suggestion
+  whose `Syntax` can't be re-serialized rather than letting it take down the
+  whole `help` output.
