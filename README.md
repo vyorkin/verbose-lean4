@@ -13,6 +13,15 @@ in [English](https://github.com/PatrickMassot/verbose-lean4/blob/master/Verbose/
 [French](https://github.com/PatrickMassot/verbose-lean4/blob/master/Verbose/French/Examples.lean),
 although GitHub obviously misses proper syntax highlighting here. 
 
+**Note on this fork:** it also includes an unofficial Russian port of the core
+tactics, see [`Verbose/Russian/Examples.lean`](Verbose/Russian/Examples.lean).
+It covers the same tactics as English/French (`Пусть`, `Поскольку`, `По`,
+`Предположим`, `Докажем`, `Заключаем по`, `Calc`, `Факт`/`Утверждение`,
+`Упражнение`/`Пример`), but not yet the interactive `help` tactic or the
+point-and-click widget — see [`translations.md`](translations.md) for why and
+for a note on making Cyrillic (or other non-Latin scripts) work as tactic
+keywords at all.
+
 There is also a point-and-click interface for courses with a low time budget. One can see it in the following animated gif.
 
 ![Point-and-click interface](verbose_widget_test_en.gif)

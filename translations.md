@@ -91,3 +91,39 @@ same time.
 If you create your own translation this is less crucial. But I still recommend
 doing this because you never know whether you’ll want to create a multilingual
 document some day.
+
+## A note on non-Latin scripts (this fork's Russian port)
+
+This fork adds an unofficial Russian translation (`Verbose/Russian`, not
+merged upstream, see the top of this file). Getting Cyrillic keywords to
+parse at all took a bit of extra work worth documenting here for whoever
+next tries a non-Latin script (Greek, Han, Arabic, Hebrew, Georgian, …).
+
+Lean's tokenizer only accepts a curated whitelist of "letter-like" Unicode
+ranges for bare identifiers and keyword atoms (`Lean.isLetterLike` in
+`Init/Meta/Defs.lean`): it covers Greek, Coptic, math letter-like symbols and
+accented/extended Latin, but not Cyrillic (`'П'.isAlpha` is `false`). This
+alone would already block a straightforward translation into Russian, but the
+actual failure mode we hit is narrower and easy to miss: a Cyrillic keyword
+declared with `syntax "…" : term` or `: command` parses and works
+immediately, while the exact same string declared with `syntax "…" : tactic`
+(or `macro "…" : tactic => …`) silently fails to register its token — every
+use then errors with `expected token`, even though the declaration itself
+compiles without complaint. `term` and `command` are unaffected; the bug is
+specific to the `tactic` category.
+
+The workaround lives in `Verbose/Russian/TokenSupport.lean`: it defines a
+`declare_ru_tokens` command that explicitly inserts each keyword into Lean's
+token table with `Lean.Parser.addToken` (the same primitive `syntax`/
+`notation` use internally), and every Russian tactic file calls it for its
+own keywords before declaring them. One more wrinkle: a *multi-word* literal
+such as `"Докажем по индукции, что "` is not one atom — Lean's `syntax`
+sugar splits it on whitespace into separate sequential atoms ("Докажем",
+"по", "индукции,", "что", each keeping any punctuation glued to it with no
+preceding space) — so each resulting *word* needs registering individually,
+not the combined phrase.
+
+None of this is needed for keywords living in a custom `declare_syntax_cat`
+category (as opposed to the built-in `tactic` category) — those register
+fine for any script, which is why e.g. the "such that"/"applied to"-style
+categories in `Verbose/Russian/Common.lean` need no such workaround.

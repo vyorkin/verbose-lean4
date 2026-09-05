@@ -18,6 +18,17 @@ The library also ships with French support that can be activated using
 setLang fr
 ```
 
+This fork additionally includes an unofficial Russian port, activated with
+```lean
+setLang ru
+```
+It covers the same core tactics as English/French (see
+[`Verbose/Russian/Examples.lean`](Verbose/Russian/Examples.lean)), but the
+`help` tactic and the suggestion widget have not been ported yet, so
+`enableHelpTactic`/`enableWidget` have no Russian-language effect. See
+[`translations.md`](translations.md) for a note on why Cyrillic tactic
+keywords need a small workaround that English/French don't.
+
 Then there are a number of boolean configuration options that can be set using
 the following commands:
 
