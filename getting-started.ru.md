@@ -52,11 +52,11 @@ Verbose Lean сам подключит Mathlib, поэтому ваш `lakefile.
 следующего содержания:
 ```lean
 import Mathlib.Topology.Instances.Real.Lemmas
-import Verbose.English.All
+import Verbose.Russian.All
 
-open Verbose English
+open Verbose Russian
 
--- Let’s define mathematical notions here
+-- Определим здесь математические понятия
 
 def continuous_function_at (f : ℝ → ℝ) (x₀ : ℝ) :=
 ∀ ε > 0, ∃ δ > 0, ∀ x, |x - x₀| ≤ δ → |f x - f x₀| ≤ ε
@@ -64,13 +64,13 @@ def continuous_function_at (f : ℝ → ℝ) (x₀ : ℝ) :=
 def sequence_tendsto (u : ℕ → ℝ) (l : ℝ) :=
 ∀ ε > 0, ∃ N, ∀ n ≥ N, |u n - l| ≤ ε
 
--- and some nice notation
+-- и несколько удобных обозначений на русском
 
-notation3:50 f:80 " is continuous at " x₀ => continuous_function_at f x₀
-notation3:50 u:80 " converges to " l => sequence_tendsto u l
+notation3:50 f:80 " непрерывна в " x₀ => continuous_function_at f x₀
+notation3:50 u:80 " стремится к " l => sequence_tendsto u l
 
--- Now configure Verbose Lean 
--- (those configuration commands are explained elsewhere)
+-- Теперь настроим Verbose Lean
+-- (эти команды настройки объясняются в другом месте)
 
 configureUnfoldableDefs continuous_function_at sequence_tendsto 
 
@@ -88,23 +88,30 @@ useDefaultSuggestionProviders
 ```lean
 import Teaching.Math101
 
-Example "Continuity implies sequential continuity"
-  Given: (f : ℝ → ℝ) (u : ℕ → ℝ) (x₀ : ℝ)
-  Assume: (hu : u converges to x₀) (hf : f is continuous at x₀)
-  Conclusion: (f ∘ u) converges to f x₀
-Proof:
-  Let's prove that ∀ ε > 0, ∃ N, ∀ n ≥ N, |f (u n) - f x₀| ≤ ε
-  Fix ε > 0
-  Since f is continuous at x₀ and ε > 0 we get δ such that
-    (δ_pos : δ > 0) and (Hf : ∀ x, |x - x₀| ≤ δ ⇒ |f x - f x₀| ≤ ε)
-  Since u converges to x₀ and δ > 0 we get N such that Hu : ∀ n ≥ N, |u n - x₀| ≤ δ
-  Let's prove that N works : ∀ n ≥ N, |f (u n) - f x₀| ≤ ε
-  Fix n ≥ N
-  Since ∀ n ≥ N, |u n - x₀| ≤ δ and n ≥ N we get h : |u n - x₀| ≤ δ
-  Since ∀ x, |x - x₀| ≤ δ → |f x - f x₀| ≤ ε and |u n - x₀| ≤ δ we conclude that |f (u n) - f x₀| ≤ ε 
-QED
+Упражнение "Непрерывность влечёт секвенциальную непрерывность"
+  Дано: (f : ℝ → ℝ) (u : ℕ → ℝ) (x₀ : ℝ)
+  Предположения: (hu : u стремится к x₀) (hf : f непрерывна в x₀)
+  Заключение: (f ∘ u) стремится к f x₀
+Доказательство:
+  Докажем, что ∀ ε > 0, ∃ N, ∀ n ≥ N, |f (u n) - f x₀| ≤ ε
+  Пусть ε > 0
+  По hf применённый к ε используя, что ε > 0 получаем δ такой, что
+    (δ_pos : δ > 0) и (Hf : ∀ x, |x - x₀| ≤ δ ⇒ |f x - f x₀| ≤ ε)
+  По hu применённый к δ используя, что δ > 0 получаем N такой, что Hu : ∀ n ≥ N, |u n - x₀| ≤ δ
+  Докажем, что N подходит: ∀ n ≥ N, |f (u n) - f x₀| ≤ ε
+  Пусть n ≥ N
+  По Hf применённый к u n достаточно доказать, что |u n - x₀| ≤ δ
+  Заключаем по Hu применённый к n используя, что n ≥ N
+ЧТД
 ```
 
 Если процесс установки прошёл успешно, Lean должен без проблем обработать
 эти файлы. После этого вы можете постепенно узнавать больше об этой
 библиотеке.
+
+Для английской или французской версии используйте соответственно
+`import Verbose.English.All` + `open Verbose English`, или
+`import Verbose.French.All` + `open Verbose French` — остальная настройка
+такая же, только формулировки в примерах и упражнениях нужно писать на
+соответствующем языке (см. [оригинальный `getting-started.md`](getting-started.md)
+с примером на английском).
