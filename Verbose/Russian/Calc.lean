@@ -2,6 +2,7 @@ import Verbose.Tactics.Calc
 import Verbose.Russian.Common
 import Verbose.Russian.We
 import Verbose.Russian.By
+import Verbose.Russian.TokenSupport
 
 section widget
 
@@ -74,6 +75,8 @@ end widget
 namespace Lean.Elab.Tactic
 open Meta Verbose Russian
 
+declare_ru_tokens "Вычислим" "Вычислим?"
+
 declare_syntax_cat CalcFirstStepRU
 syntax ppIndent(colGe term (" из "  sepBy(maybeAppliedRU, " и из "))?) : CalcFirstStepRU
 syntax ppIndent(colGe term (" по предположению")?) : CalcFirstStepRU
@@ -92,7 +95,7 @@ syntax ppIndent(colGe term " поскольку?") : CalcStepRU
 syntax ppIndent(colGe term " по " tacticSeq) : CalcStepRU
 syntax CalcStepRUs := ppLine withPosition(CalcFirstStepRU) withPosition((ppLine linebreak CalcStepRU)*)
 
-syntax (name := calcTacticRU) "Calc" CalcStepRUs : tactic
+syntax (name := calcTacticRU) "Вычислим" CalcStepRUs : tactic
 
 elab tk:"sinceCalcTacRU" facts:factsRU : tactic => withRef tk <| sinceCalcTac (factsRUToArray facts)
 
@@ -165,7 +168,7 @@ def convertCalcStepsRU (steps : TSyntax ``CalcStepRUs) : TermElabM (TSyntax ``ca
   | _ => throwUnsupportedSyntax
 
 elab_rules : tactic
-| `(tactic|Calc%$calcstx $stx) => do
+| `(tactic|Вычислим%$calcstx $stx) => do
   let steps : TSyntax ``CalcStepRUs := ⟨stx⟩
   let (steps, tks?) ← convertCalcStepsRU steps
   let views ← Lean.Elab.Term.mkCalcStepViews steps
@@ -188,44 +191,44 @@ elab_rules : tactic
       isFirst := false
   evalVerboseCalc (← `(tactic|calc%$calcstx $steps))
 
-syntax (name := Calc?RU) "Calc?" : tactic
+syntax (name := Calc?RU) "Вычислим?" : tactic
 
-elab "Calc?" : tactic =>
-  mkCalc?Tac "Создать вычисление" "Calc" "поскольку?"
+elab "Вычислим?" : tactic =>
+  mkCalc?Tac "Создать вычисление" "Вычислим" "поскольку?"
 
 setLang ru
 
 example (a b : ℕ) : (a + b)^ 2 = 2*a*b + (a^2 + b^2) := by
   success_if_fail_with_msg "Unknown identifier `x`"
-    Calc (x+b)^2 = a^2 + b^2 + 2*a*b вычислением
+    Вычислим (x+b)^2 = a^2 + b^2 + 2*a*b вычислением
     _ = 2*a*b + (a^2 + b^2) вычислением
-  Calc (a+b)^2 = a^2 + b^2 + 2*a*b   вычислением
+  Вычислим (a+b)^2 = a^2 + b^2 + 2*a*b   вычислением
     _           = 2*a*b + (a^2 + b^2) вычислением
 
 example (a b c d : ℕ) (h : a ≤ b) (h' : c ≤ d) : a + 0 + c ≤ b + d := by
-  Calc a + c    ≤ b + c из h
+  Вычислим a + c    ≤ b + c из h
   _              ≤ b + d из h'
 
 example (a b c d : ℕ) (h : a ≤ b) (h' : c ≤ d) : a + 0 + c ≤ b + d := by
-  Calc a + 0 + c = a + c вычислением
+  Вычислим a + 0 + c = a + c вычислением
   _              ≤ b + c из h
   _              ≤ b + d из h'
 
 example (a b c d : ℕ) (h : a ≤ b) (h' : c ≤ d) : a + 0 + c ≤ b + d := by
-  Calc a + 0 + c = a + c вычислением
+  Вычислим a + 0 + c = a + c вычислением
   _              ≤ b + c поскольку a ≤ b
   _              ≤ b + d поскольку c ≤ d
 
 example (a b c d : ℕ) (h : a ≤ b) (h' : c ≤ d) : a + 0 + c ≤ b + d := by
-  Calc a + 0 + c = a + c вычислением
+  Вычислим a + 0 + c = a + c вычислением
   _              ≤ b + d поскольку a ≤ b и c ≤ d
 
 example (a b c d : ℕ) (h : a ≤ b) (h' : c ≤ d) : a + 0 + c ≤ b + d := by
-  Calc a + 0 + c = a + c вычислением
+  Вычислим a + 0 + c = a + c вычислением
   _              ≤ b + d из h и из h'
 
 example (a b c d : ℕ) (h : a ≤ b) (h' : c ≤ d) : a + 0 + c ≤ b + d := by
-  Calc a + 0 + c = a + c вычислением
+  Вычислим a + 0 + c = a + c вычислением
   _              ≤ b + d из h и из h'
 
 def even_fun  (f : ℝ → ℝ) := ∀ x, f (-x) = f x
@@ -234,61 +237,61 @@ example (f g : ℝ → ℝ) : even_fun f → even_fun g →  even_fun (f + g) :=
   intro hf hg
   show ∀ x, (f+g) (-x) = (f+g) x
   intro x₀
-  Calc (f + g) (-x₀) = f (-x₀) + g (-x₀) вычислением
+  Вычислим (f + g) (-x₀) = f (-x₀) + g (-x₀) вычислением
   _                  = f x₀ + g (-x₀)    поскольку f (-x₀) = f x₀
   _                  = f x₀ + g x₀       поскольку g (-x₀) = g x₀
   _                  = (f + g) x₀        вычислением
 
 example (f g : ℝ → ℝ) : even_fun f →  even_fun (g ∘ f) := by
   intro hf x
-  Calc (g ∘ f) (-x) = g (f (-x)) вычислением
+  Вычислим (g ∘ f) (-x) = g (f (-x)) вычислением
                 _   = g (f x)    поскольку f (-x) = f x
 
 example (f : ℝ → ℝ) (x : ℝ) (hx : f (-x) = f x ∧ 1 = 1) : f (-x) + 0 = f x := by
-  Calc f (-x) + 0 = f (-x) вычислением
+  Вычислим f (-x) + 0 = f (-x) вычислением
                 _   = f x  поскольку f (-x) = f x
 
 example (f g : ℝ → ℝ) (hf : even_fun f) (hg : even_fun g) (x) :  (f+g) (-x) = (f+g) x := by
-  Calc (f + g) (-x) = f (-x) + g (-x) вычислением
+  Вычислим (f + g) (-x) = f (-x) + g (-x) вычислением
   _                 = f x + g (-x)    поскольку even_fun f
   _                 = f x + g x       поскольку even_fun g
   _                 = (f + g) x       вычислением
 
 example (ε : ℝ) (h : ε > 1) : 0 ≤ ε := by
-  Calc
+  Вычислим
     (0 : ℝ) ≤ 1 по norm_num
     _       < ε из h
 
 example (ε : ℝ) (h : ε > 1) : ε ≥ 0 := by
-  Calc
+  Вычислим
     (0 : ℝ) ≤ 1 по norm_num
     _       < ε из h
 
 example (ε : ℝ) (h : ε > 1) : ε ≥ 0 := by
-  Calc
+  Вычислим
     ε > 1 из h
     _ > 0 по norm_num
 
 example (ε : ℝ) (h : ε = 1) : ε+1 ≥ 2 := by
-  Calc
+  Вычислим
     ε + 1 = 1 + 1 по rw [h]
     _     = 2 по norm_num
 
 example (ε : ℝ) (h : ε = 1) : ε+1 ≤ 2 := by
-  Calc
+  Вычислим
     ε + 1 = 1 + 1 по rw [h]
     _     = 2 по norm_num
 
 example (f : ℝ → ℝ) (h : ∀ x, f (f x) = x) : f (f 0) + 0 = 0 := by
-  Calc f (f 0) + 0 = f (f 0) вычислением
+  Вычислим f (f 0) + 0 = f (f 0) вычислением
        _           = 0       по предположению
 
 example (f : ℝ → ℝ) (h : ∀ x, f (f x) = x) : f (f 0) = 0 + 0 := by
-  Calc f (f 0) = 0      по предположению
+  Вычислим f (f 0) = 0      по предположению
        _       = 0  + 0 вычислением
 
 example (u : ℕ → ℝ) (y) (hy : ∀ n, u n = y) (n m) : u n = u m := by
-  Calc
+  Вычислим
     u n = y поскольку ∀ n, u n = y
     _   = u m поскольку ∀ n, u n = y
 
@@ -299,10 +302,10 @@ example (ε : ℝ) (ε_pos : 1/ε > 0) (N : ℕ) (hN : N ≥ 1 / ε) : N > 0 := 
   3 > 0
 but is expected to have type
   N > 0"
-    Calc
+    Вычислим
       3 ≥ 1/ε поскольку?
       _ > 0 из ε_pos
-  Calc
+  Вычислим
     N ≥ 1/ε из hN
     _ > 0 из ε_pos
 
@@ -312,32 +315,32 @@ example (ε : ℝ) (ε_pos : 1/ε > 0) (N : ℕ) (hN : N ≥ 1 / ε) : N ≥ 0 :
   3 > 0
 but is expected to have type
   N ≥ 0"
-    Calc
+    Вычислим
       3 ≥ 1/ε поскольку?
       _ > 0 из ε_pos
-  Calc
+  Вычислим
     N ≥ 1/ε из hN
     _ > 0 из ε_pos
 
 -- A case where the conclusion has an extra cast
 example (N : ℕ) (hN : N ≥ 3) : N > (1 : ℝ) := by
-  Calc
+  Вычислим
     N ≥ 3 из hN
     _ > 1 вычислением
 
 -- Combine with relaxed calc now
 example (N : ℕ) (hN : N ≥ 3) : N ≥ (1 : ℝ) := by
-  Calc
+  Вычислим
     N ≥ 3 из hN
     _ > 1 вычислением
 
 example (x : ℝ) (p : ℕ) (h : x ≤ p) : x < (p + 1 : ℕ) := by
-  Calc x ≤ p по assumption
+  Вычислим x ≤ p по assumption
     _ < p + 1 вычислением
 
 -- Regression test for bug where simp reached max recursion depth
 example (a b : ℝ) (h : a = a*b) : a - a* b = 0 := by
-  Calc a - a*b = 0 поскольку a = a*b
+  Вычислим a - a*b = 0 поскольку a = a*b
 
 example (u : Nat → Nat) (h : ∀ n, u n = u 0)
   : ∀ n, ∀ m, u m = u n := by
@@ -346,16 +349,16 @@ example (u : Nat → Nat) (h : ∀ n, u n = u 0)
   u m : ℕ
 but is expected to be
   u n : ℕ"
-    Calc
+    Вычислим
       u m = u 0 поскольку ∀ n, u n = u 0
       _   = u n поскольку ∀ n, u n = u 0
   success_if_fail_with_msg "invalid 'calc' step, right-hand side is
   u n : ℕ
 but is expected to be
   u m : ℕ"
-    Calc
+    Вычислим
       u n = u 0 поскольку ∀ n, u n = u 0
       _   = u n поскольку ∀ n, u n = u 0
-  Calc
+  Вычислим
     u n = u 0 поскольку ∀ n, u n = u 0
     _   = u m поскольку ∀ n, u n = u 0

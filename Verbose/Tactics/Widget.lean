@@ -149,8 +149,9 @@ if h : 0 < params.goals.size then
                   {.text linkText}
                 </MakeEditLink>
               </li>
-        return .element "ul" #[("style", json% { "font-size": "125%"})] children)
+        return .element "ul" #[("style", json% { "font-size": "100%"})] children)
   return <details «open»={true} id={htmlId}>
+           <style>{.text ("#" ++ htmlId ++ " a.link { color: #333333 !important; }")}</style>
            <summary className="mv2 pointer">{.text title}</summary>
            <div className="ml1">{inner}</div>
          </details>

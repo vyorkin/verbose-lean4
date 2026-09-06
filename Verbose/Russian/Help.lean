@@ -531,7 +531,7 @@ implement_endpoint (lang := ru) helpSetEqSuggestion (lS rS : Term) : SuggestionM
   pushTac `(tactic|Переписываем, используя ?_)
   flush
   pushCom "или начать вычисление так:"
-  pushTac `(tactic|Calc $lS:term = $rS поскольку?)
+  pushTac `(tactic|Вычислим $lS:term = $rS поскольку?)
   flush
   pushCom "Можно также доказать это через двойное включение."
   pushCom "В этом случае доказательство начинается так:"
@@ -543,7 +543,7 @@ implement_endpoint (lang := ru) helpSinceSetEqSuggestion (lS rS : Term) : Sugges
   pushTac `(tactic|Поскольку ?_ достаточно доказать, что ?_)
   flush
   pushCom "или начать вычисление так:"
-  pushTac `(tactic|Calc $lS:term = $rS поскольку?)
+  pushTac `(tactic|Вычислим $lS:term = $rS поскольку?)
   flush
   pushCom "Можно также доказать это через двойное включение."
   pushCom "В этом случае доказательство начинается так:"
@@ -555,7 +555,7 @@ implement_endpoint (lang := ru) helpEqGoalSuggestion (lS rS : Term) : Suggestion
   pushTac `(tactic|Переписываем, используя ?_)
   flush
   pushCom "или начать вычисление так:"
-  pushTac `(tactic|Calc $lS:term = $rS поскольку?)
+  pushTac `(tactic|Вычислим $lS:term = $rS поскольку?)
   flush
   pushCom "Можно также составить линейную комбинацию предположений так:"
   pushTac `(tactic|Комбинируем [?_, ?_])
@@ -566,12 +566,12 @@ implement_endpoint (lang := ru) helpSinceEqGoalSuggestion (goal : Term) : Sugges
   pushTac `(tactic|Поскольку ?_ заключаем, что $goal)
   flush
   pushCom "или начать вычисление так:"
-  pushTac `(tactic|Calc $goal:term поскольку?)
+  pushTac `(tactic|Вычислим $goal:term поскольку?)
 
 implement_endpoint (lang := ru) helpIneqGoalSuggestion (goal : Term) (rel : String) : SuggestionM Unit := do
   pushCom "Цель — неравенство"
   pushCom "Можно начать вычисление так:"
-  pushTac `(tactic|Calc $goal:term поскольку?)
+  pushTac `(tactic|Вычислим $goal:term поскольку?)
   pushCom "Последняя строка вычисления не обязательно равенство, она может быть неравенством."
   pushCom "Аналогично первая строка может быть равенством. В целом символы отношений"
   pushCom "должны образовать цепочку, дающую {rel}"
@@ -582,7 +582,7 @@ implement_endpoint (lang := ru) helpIneqGoalSuggestion (goal : Term) (rel : Stri
 implement_endpoint (lang := ru) helpSinceIneqGoalSuggestion (goal : Term) (rel : String) : SuggestionM Unit := do
   pushCom "Цель — неравенство"
   pushCom "Можно начать вычисление так:"
-  pushTac `(tactic|Calc $goal:term поскольку?)
+  pushTac `(tactic|Вычислим $goal:term поскольку?)
   pushCom "Последняя строка вычисления не обязательно равенство, она может быть неравенством."
   pushCom "Аналогично первая строка может быть равенством. В целом символы отношений"
   pushCom "должны образовать цепочку, дающую {rel}"
@@ -1638,7 +1638,7 @@ example (ε : ℝ) (h : ε > 0) : ε/2 > 0 := by
 info: Помощь
   • Цель — неравенство
     Можно начать вычисление так:
-    Calc
+    Вычислим
         ε / 2 > 0 поскольку?
     Последняя строка вычисления не обязательно равенство, она может быть неравенством.
     Аналогично первая строка может быть равенством. В целом символы отношений
@@ -1712,7 +1712,7 @@ example (h : 0 = 1) : False := by
 info: Помощь
   • Цель — неравенство
     Можно начать вычисление так:
-    Calc
+    Вычислим
         a ≤ c поскольку?
     Последняя строка вычисления не обязательно равенство, она может быть неравенством.
     Аналогично первая строка может быть равенством. В целом символы отношений

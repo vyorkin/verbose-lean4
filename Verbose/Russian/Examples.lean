@@ -45,7 +45,7 @@ set_option linter.unusedTactic false
   Докажем, что ∃ N, ∀ n ≥ N, |u n - l| ≤ ε
   Докажем, что 0 подходит
   Пусть n ≥ 0
-  Calc |u n - l| = |l - l| из h
+  Вычислим |u n - l| = |l - l| из h
    _             = 0       вычислением
    _             ≤ ε       из ε_pos
 ЧТД
@@ -79,7 +79,7 @@ open Verbose.Named in
   По n_ge получаем (hn₁ : N₁ ≤ n) (hn₂ : N₂ ≤ n)
   Утверждение fact1 : |u n - l|  ≤ ε/2 из hN₁ применённый к n используя hn₁
   Утверждение fact2 : |v n - l'| ≤ ε/2 из hN₂ применённый к n используя hn₂
-  Calc
+  Вычислим
   |(u + v) n - (l + l')| = |(u n - l) + (v n - l')| вычислением
                      _   ≤ |u n - l| + |v n - l'|   из abs_add_le
                      _   ≤  ε/2 + ε/2               из fact1 и из fact2
@@ -102,10 +102,10 @@ open Verbose.Named in
   Поскольку ∀ n ≥ N, |u n - l| ≤ ε и n ≥ N получаем, что |u n - l| ≤ ε
   Поскольку ∀ n ≥ N', |w n - l| ≤ ε и n ≥ N' получаем, что |w n - l| ≤ ε
   Докажем сначала, что -ε ≤ v n - l
-  Calc -ε ≤ u n - l поскольку |u n - l| ≤ ε
+  Вычислим -ε ≤ u n - l поскольку |u n - l| ≤ ε
       _   ≤ v n - l поскольку u n ≤ v n
   Докажем теперь, что v n - l ≤ ε
-  Calc v n - l ≤ w n - l поскольку v n ≤ w n
+  Вычислим v n - l ≤ w n - l поскольку v n ≤ w n
       _        ≤ ε       поскольку |w n - l| ≤ ε
 ЧТД
 
@@ -122,7 +122,7 @@ open Verbose.Named in
       такой, что hN : ∀ n ≥ N, |u n - l| ≤ ε / 2
   Докажем, что N подходит
   Пусть n ≥ N
-  Calc |u n - l| ≤ ε/2 из hN применённый к n используя, что n ≥ N
+  Вычислим |u n - l| ≤ ε/2 из hN применённый к n используя, что n ≥ N
        _         < ε   из ε_pos
   Докажем теперь, что (∀ ε > 0, ∃ N, ∀ n ≥ N, |u n - l| < ε) ⇒ u стремится к l
   Предположим hyp : ∀ ε > 0, ∃ N, ∀ n ≥ N, |u n - l| < ε
@@ -148,7 +148,7 @@ open Verbose.Named in
      получаем hN₁ : |u (max N N') - l| ≤ ε / 2
   По hN' применённый к max N N' используя le_max_right _ _
     получаем hN'₁ : |u (max N N') - l'| ≤ ε / 2
-  Calc |l - l'| = |(l-u (max N N')) + (u (max N N') -l')|  вычислением
+  Вычислим |l - l'| = |(l-u (max N N')) + (u (max N N') -l')|  вычислением
     _           ≤ |l - u (max N N')| + |u (max N N') - l'| из abs_add_le
     _           = |u (max N N') - l| + |u (max N N') - l'| из abs_sub_comm
     _           ≤  ε/2 + ε/2                               из hN₁ и из hN'₁
@@ -169,11 +169,11 @@ open Verbose.Named in
   По inf_M применённый к n получаем (inf_M' : u n ≤ M)
   Докажем сначала, что -ε ≤ u n - M
   · По h' применённый к n₀ и n используя n_ge получаем h'' : u n₀ ≤ u n
-    Calc
+    Вычислим
       -ε ≤ u n₀ - M из hn₀
       _  ≤ u n - M из h''
   Докажем теперь, что u n - M ≤ ε
-  · Calc
+  · Вычислим
      u n - M ≤ M - M из inf_M'
      _       = 0     вычислением
      _       ≤ ε     из ε_pos

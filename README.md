@@ -1,47 +1,211 @@
 # Verbose Lean 4
 
-This project provides tactics and commands for
-[Lean](https://leanprover-community.github.io/) in a very controlled
-natural language. The original version of those tactics were written in
-French for teaching purposes at 
-[Université Paris-Saclay](https://www.universite-paris-saclay.fr/) in
-Orsay using Lean 3. The goal is not to make Lean code easier to write, the goal is to
-make Lean code easier to transfer to a traditional paper proof.
+*Читаете не на том языке? Оригинальный английский README сохранён в
+[README.en.md](README.en.md).*
 
-The best way to have a quick look is to read the examples file
-in [English](https://github.com/PatrickMassot/verbose-lean4/blob/master/Verbose/English/Examples.lean) or 
-[French](https://github.com/PatrickMassot/verbose-lean4/blob/master/Verbose/French/Examples.lean),
-although GitHub obviously misses proper syntax highlighting here. 
+Этот проект предоставляет тактики и команды для
+[Lean](https://leanprover-community.github.io/), написанные на подчёркнуто
+"многословном", контролируемом естественном языке. Изначальная версия этих
+тактик была написана на французском для преподавания в
+[Université Paris-Saclay](https://www.universite-paris-saclay.fr/) в Орсэ,
+ещё на Lean 3. Цель библиотеки не в том, чтобы упростить написание кода на
+Lean, а в том, чтобы упростить перенос доказательства на Lean в традиционное
+бумажное доказательство и обратно.
 
-**Note on this fork:** it also includes an unofficial Russian port, see
-[`Verbose/Russian/Examples.lean`](Verbose/Russian/Examples.lean). It covers
-the same tactics as English/French (`Пусть`, `Поскольку`, `По`,
-`Предположим`, `Докажем`, `Заключаем по`, `Calc`, `Факт`/`Утверждение`,
-`Упражнение`/`Пример`), including the interactive `помощь` (`help`) tactic
-and the point-and-click widget — see [`translations.md`](translations.md) for
-a note on the Lean-level quirks that had to be worked around to make
-Cyrillic (or any other non-Latin script) work as tactic keywords at all.
+Быстрее всего составить впечатление о библиотеке — посмотреть на файл с
+примерами: на [английском](https://github.com/PatrickMassot/verbose-lean4/blob/master/Verbose/English/Examples.lean)
+или на [французском](https://github.com/PatrickMassot/verbose-lean4/blob/master/Verbose/French/Examples.lean)
+(GitHub, конечно, не умеет подсвечивать синтаксис этих файлов как надо).
 
-There is also a point-and-click interface for courses with a low time budget. One can see it in the following animated gif.
+**Об этом форке:** он также включает неофициальный русский перевод, см.
+[`Verbose/Russian/Examples.lean`](Verbose/Russian/Examples.lean). Он
+покрывает те же тактики, что английская и французская версии (`Пусть`,
+`Поскольку`, `По`, `Предположим`, `Докажем`, `Заключаем по`, `Вычислим`,
+`Факт`/`Утверждение`, `Упражнение`/`Пример`), включая интерактивную тактику
+`помощь` (`help`) и виджет с подсказками по клику — см.
+[`translations.md`](translations.md), где описаны особенности Lean, которые
+пришлось обходить, чтобы кириллица (или любой другой не-латинский алфавит)
+вообще заработала как ключевые слова тактик.
 
-![Point-and-click interface](verbose_widget_test_en.gif)
+Также в библиотеке есть интерфейс с подсказками по клику — для курсов, где
+мало времени. Ниже показана анимация, демонстрирующая его работу.
 
-You can read [a paper](itp2024_paper.pdf) written about this library for 
+![Интерфейс с подсказками по клику](verbose_widget_test_en.gif)
+
+Про эту библиотеку есть [статья](itp2024_paper.pdf), написанная для
 [ITP2024](https://www.viam.science.tsu.ge/itp2024/).
 
-If you want to try it or start writing your exercises using it then you
-should read [getting-started.md](getting-started.md). Then you can tweak the
-behavior of tactics using the [basic configuration guide](basic-configuration.md).
-For information about translating those tactics to your language, see the
-[translation guide](translations.md).
+Если вы хотите попробовать библиотеку или начать писать на ней свои
+упражнения, читайте [getting-started.md](getting-started.md) (на английском)
+или раздел [«Быстрый старт»](#быстрый-старт-подключение-библиотеки-к-своему-проекту)
+ниже — это его русский, чуть более подробный пересказ применительно к этому
+форку. Затем поведение тактик можно настроить с помощью
+[руководства по базовой настройке](basic-configuration.md). Про перевод
+тактик на свой язык — в [руководстве по переводу](translations.md).
 
-You can find a very simple example of a library importing Verbose at
+Простой пример библиотеки, импортирующей Verbose, можно посмотреть в
 [verbose-lean-demo](https://github.com/PatrickMassot/verbose-lean-demo).
-You can find a full set of exercises in the [proofs with Lean](https://github.com/PatrickMassot/proofs_with_lean) repository. If you are a teacher then you can ask me for the solutions to those exercises. The French version is in the [MDD154](https://github.com/PatrickMassot/MDD154/) repository.
+Полный набор упражнений — в репозитории
+[proofs with Lean](https://github.com/PatrickMassot/proofs_with_lean).
+Если вы преподаватель, можно попросить у автора решения к этим упражнениям.
+Французская версия — в репозитории
+[MDD154](https://github.com/PatrickMassot/MDD154/).
 
-If you simply want to play a bit with the example shown in the picture above
-then you can 
-[![Open the project in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/new/#https://github.com/patrickmassot/verbose-lean4) 
-and use the file explorer to open the file `Verbose/English/Examples.lean`.
+Если вы просто хотите немного поиграть с примером, показанным на картинке
+выше, можно
+[![Открыть проект в Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/new/#https://github.com/patrickmassot/verbose-lean4)
+и открыть через файловый менеджер файл `Verbose/English/Examples.lean`.
 
-If you use those tactics for teaching, I'd be very interested to hear about it, and would gladly add your name and the name of your university in this file.
+Если вы используете эти тактики для преподавания, автору будет очень
+интересно об этом узнать — он с радостью добавит ваше имя и название вашего
+университета в этот файл.
+
+## Быстрый старт: подключение библиотеки к своему проекту
+
+Этот раздел — практическая инструкция на русском, как подключить Verbose
+Lean (в том числе с русским переводом из этого форка) в собственном учебном
+проекте. Более подробная версия на английском — в
+[getting-started.md](getting-started.md).
+
+Предполагается, что Lean уже установлен — если нет, см.
+[официальную инструкцию по быстрому старту](https://lean-lang.org/lean4/doc/quickstart.html).
+
+### 1. Создайте Lean-проект
+
+Через меню Lean в VSCode или из терминала:
+
+```sh
+lake new teaching lib
+```
+
+Это создаст папку `teaching` со стандартной структурой Lean-проекта. Не
+используйте в имени папки экзотические/нелатинские символы — Lean от этого
+не в восторге.
+
+### 2. Синхронизируйте версию Lean
+
+Ваш проект должен использовать ту же версию Lean, что и Verbose Lean.
+Скопируйте содержимое файла [`lean-toolchain`](lean-toolchain) из этого
+репозитория в файл `lean-toolchain` вашего проекта (он создаётся
+автоматически командой `lake init`/`lake new` в корне проекта).
+
+### 3. Подключите библиотеку в `lakefile.toml`
+
+Допишите в конец `lakefile.toml` вашего проекта:
+
+```toml
+[[require]]
+name = "verbose"
+git = "https://github.com/PatrickMassot/verbose-lean4.git"
+rev = "master"
+```
+
+Если вам нужна поддержка русского языка (`Пусть`, `Поскольку`, `По`,
+тактика `помощь`, виджет и т.д.) — она пока не влита в основной репозиторий,
+поэтому вместо этого укажите форк с русским переводом:
+
+```toml
+[[require]]
+name = "verbose"
+git = "https://github.com/vyorkin/verbose-lean4.git"
+rev = "master"
+```
+
+(если к моменту чтения русский перевод в `master` этого форка ещё не попал,
+укажите нужную ветку явно, например `rev = "add-russian-language"`).
+
+**Важно:** если в вашем `lakefile.toml` уже была строка `require mathlib`,
+уберите её. Verbose Lean сам тянет за собой нужную версию Mathlib, и
+одновременное требование двух версий Mathlib может привести к конфликту
+версий.
+
+### 4. Обновите зависимости
+
+Из корня вашего проекта выполните:
+
+```sh
+lake update verbose
+```
+
+Это обновит `lake-manifest.json` и скачает Verbose Lean со всеми
+зависимостями, включая скомпилированный Mathlib — загрузка большая, наберитесь
+терпения.
+
+### 5. Создайте файл-«учительскую» библиотеку
+
+Если вы назвали проект `teaching`, в нём появится папка `Teaching` — в неё
+кладутся все ваши Lean-файлы, а файл `Teaching.lean` должен импортировать
+всё, что нужно собирать через `lake build` (обычно всё, кроме одноразовых
+черновиков).
+
+Создайте в папке `Teaching` файл, например `Math101.lean`, который
+импортирует Verbose, настраивает её и определяет нужные вам математические
+понятия. Для русской версии:
+
+```lean
+import Mathlib.Topology.Instances.Real.Lemmas
+import Verbose.Russian.All
+
+open Verbose Russian
+
+-- Определяем нужные математические понятия
+
+def continuous_function_at (f : ℝ → ℝ) (x₀ : ℝ) :=
+∀ ε > 0, ∃ δ > 0, ∀ x, |x - x₀| ≤ δ → |f x - f x₀| ≤ ε
+
+def sequence_tendsto (u : ℕ → ℝ) (l : ℝ) :=
+∀ ε > 0, ∃ N, ∀ n ≥ N, |u n - l| ≤ ε
+
+-- и удобные обозначения на русском
+
+notation3:50 f:80 " непрерывна в " x₀ => continuous_function_at f x₀
+notation3:50 u:80 " стремится к " l => sequence_tendsto u l
+
+-- Настраиваем Verbose Lean
+-- (эти команды настройки описаны в basic-configuration.md)
+
+configureUnfoldableDefs continuous_function_at sequence_tendsto
+
+configureAnonymousFactSplittingLemmas le_le_of_abs_le le_le_of_max_le
+
+configureAnonymousGoalSplittingLemmas LogicIntros AbsIntros
+
+useDefaultDataProviders
+
+useDefaultSuggestionProviders
+```
+
+Для английской или французской версии используйте соответственно
+`import Verbose.English.All` + `open Verbose English`, или
+`import Verbose.French.All` + `open Verbose French` — остальная настройка та
+же самая.
+
+### 6. Создайте файл с упражнением для студентов
+
+Например, `HomeWork1.lean`:
+
+```lean
+import Teaching.Math101
+
+Упражнение "Непрерывность влечёт секвенциальную непрерывность"
+  Дано: (f : ℝ → ℝ) (u : ℕ → ℝ) (x₀ : ℝ)
+  Предположения: (hu : u стремится к x₀) (hf : f непрерывна в x₀)
+  Заключение: (f ∘ u) стремится к f x₀
+Доказательство:
+  Докажем, что ∀ ε > 0, ∃ N, ∀ n ≥ N, |f (u n) - f x₀| ≤ ε
+  Пусть ε > 0
+  По hf применённый к ε используя, что ε > 0 получаем δ такой, что
+    (δ_pos : δ > 0) и (Hf : ∀ x, |x - x₀| ≤ δ ⇒ |f x - f x₀| ≤ ε)
+  По hu применённый к δ используя, что δ > 0 получаем N такой, что Hu : ∀ n ≥ N, |u n - x₀| ≤ δ
+  Докажем, что N подходит: ∀ n ≥ N, |f (u n) - f x₀| ≤ ε
+  Пусть n ≥ N
+  По Hf применённый к u n достаточно доказать, что |u n - x₀| ≤ δ
+  Заключаем по Hu применённый к n используя, что n ≥ N
+ЧТД
+```
+
+Если установка прошла успешно, Lean должен без проблем обработать эти
+файлы. Дальше можно постепенно изучать остальные возможности библиотеки:
+[базовую настройку](basic-configuration.md), список конфигурационных
+команд и то, как писать собственные подсказки и правила для тактики
+`помощь`/`help`.
