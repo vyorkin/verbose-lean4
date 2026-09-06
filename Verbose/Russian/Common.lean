@@ -1,8 +1,15 @@
 import Verbose.Tactics.Common
+import Verbose.Russian.TokenSupport
 
 open Lean
 
 namespace Verbose.Russian
+
+declare_ru_tokens "рефл"
+
+/-- Russian spelling of the `rfl` tactic, short for "рефлексивность" (reflexivity),
+so that a bare Latin `rfl` doesn't stand out in the middle of a Cyrillic proof. -/
+macro "рефл" : tactic => `(tactic| rfl)
 
 declare_syntax_cat appliedToRU
 syntax "применённый к " sepBy(term, " и ") : appliedToRU
